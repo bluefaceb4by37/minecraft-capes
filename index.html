@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wybierz pelerynkę</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #111; color: #fff; }
+    .cape { width: 100px; margin: 10px; cursor: pointer; border: 2px solid transparent; }
+    .cape:hover { border: 2px solid lime; }
+  </style>
+</head>
+<body>
+  <h1>Wybierz swoją pelerynkę</h1>
+  <div id="capes"></div>
+
+  <script>
+    const capes = [
+      { name: "Zielona", file: "cape1.png" },
+      { name: "Czerwona", file: "cape2.png" },
+      { name: "Niebieska", file: "cape3.png" },
+    ];
+
+    const container = document.getElementById("capes");
+    capes.forEach(cape => {
+      const img = document.createElement("img");
+      img.src = `capes/${cape.file}`;
+      img.className = "cape";
+      img.title = cape.name;
+      img.onclick = () => selectCape(cape.file);
+      container.appendChild(img);
+    });
+
+    function selectCape(filename) {
+      fetch("https://raw.githubusercontent.com/bluefaceb4by37/minecraft-capes/main/selected.json", {
+        method: "PUT",
+        body: JSON.stringify({ cape: filename }),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(() => alert("Pelerynka ustawiona!"))
+      .catch(() => alert("Nie udało się zapisać wyboru."));
+    }
+  </script>
+</body>
+</html>
